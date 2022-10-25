@@ -33,6 +33,7 @@ public:
     void deleteAutos(); 
     T* operator->();
 };
+
 template <class T>
 Auto<T>& Auto<T>::operator=(const Auto<T>&
     obj) {
@@ -42,10 +43,12 @@ Auto<T>& Auto<T>::operator=(const Auto<T>&
     }
     return *this;
 }
+
 template <class T>
 T* Auto<T>::operator->() {
     return currentState;
 }
+
 template <class T>
 void Auto<T>::showState(State state) { 
     cout << "User state: ";
@@ -56,6 +59,7 @@ void Auto<T>::showState(State state) {
     cout << "currentValue = " << currentState->getNumber() <<
         endl;
 }
+
 template <class T>
 int Auto<T>::beginAutos(int UserNumber) { 
     prevState = currentState;
@@ -64,11 +68,13 @@ int Auto<T>::beginAutos(int UserNumber) {
     currentState->setNumber(UserNumber);
     return 1;
 }
+
 template <class T>
 void Auto<T>::commit() {
     delete prevState;
     prevState = NULL;
 }
+
 template <class T>
 void Auto<T>::deleteAutos() {
     if (prevState != NULL) {
@@ -77,11 +83,13 @@ void Auto<T>::deleteAutos() {
         prevState = NULL;
     }
 }
+
 template <class T>
 struct Status {
     T* ptr;
     int counter;
 };
+
 template <class T>
 class SmartPointer {
     Status<T>* smartPtr;
@@ -96,6 +104,7 @@ public:
             << smartPtr << " равно: " << smartPtr->counter << endl;
     }
 };
+
 template <class T>
 SmartPointer<T>::SmartPointer(T* ptr) {
     if (!ptr)
@@ -106,11 +115,13 @@ SmartPointer<T>::SmartPointer(T* ptr) {
         smartPtr->counter = 1;
     }
 }
+
 template <class T>
 SmartPointer<T>::SmartPointer(const SmartPointer& obj)
     :smartPtr(obj.smartPtr) {
     if (smartPtr) smartPtr->counter++;
 }
+
 template <class T>
 SmartPointer<T>::~SmartPointer() {
     if (smartPtr) {
@@ -121,11 +132,13 @@ SmartPointer<T>::~SmartPointer() {
         }
     }
 }
+
 template <class T>
 T* SmartPointer<T>::operator->() const {
     if (smartPtr) return smartPtr->ptr;
     else return NULL;
 }
+
 template <class T>
 SmartPointer<T>& SmartPointer<T>::operator=(const SmartPointer&
     obj) {
@@ -140,61 +153,65 @@ SmartPointer<T>& SmartPointer<T>::operator=(const SmartPointer&
     if (smartPtr) smartPtr->counter++;
     return *this;
 }
+
+
 void main() {
+    SetConsoleCP(1251);
+    SetConsoleOutputCP(1251);
     Auto<User<int>> firstUser;
     int balance;
-    cout << "Enter initial balance" << endl;
+    cout << "Введите исходный баланс" << endl;
     cin >> balance;
     try {
-        if (balance <= 0) throw "Error";
+        if (balance <= 0) throw "Ошибка";
     }
     catch (...) {
-        cout << "Balance is lower than 0" << endl;
+        cout << "Балансе ниже нуля" << endl;
     }
     firstUser->setNumber(balance); 
     firstUser.showState(State::begin);
-    cout << "Initialization finished successfully!" << endl;
+    cout << "Инициализация прошла успешно!" << endl;
     cout << "--------------------------------------------------"
         << endl;
     int initBalance;
-    cout << "Enter amount of money" << endl;
+    cout << "Введите количество денег" << endl;
     cin >> initBalance;
     try {
-        if (initBalance <= 0) throw "Error";
+        if (initBalance <= 0) throw "Ошибка";
     }
     catch (...) {
-        cout << "Amount of money is lower than 0" << endl;
+        cout << "Сумма меньше нуля" << endl;
     }
-    cout << "First Auto started with the value of" << initBalance << endl;
+    cout << "Первая транзацкия началась со значения " << initBalance << endl;
     if (firstUser.beginAutos(initBalance)) { 
         firstUser.showState(State::middle);
     }
-    cout << "First Auto has finished successfully" << endl;
+    cout << "Первая транзакция успешно завершилась" << endl;
     cout << endl;
     cout << "--------------------------------------------------"
         << endl;
     firstUser.deleteAutos();
-    cout << "First Auto has been cancelled" << endl;
+    cout << "Первая транзакция была отменена" << endl;
     firstUser.commit();
     firstUser.showState(State::middle);
     cout << "--------------------------------------------------"
         << endl;
     int endBalance;
-    cout << "Enter initial balance" << endl;
+    cout << "Введите исходный баланс" << endl;
     cin >> endBalance;
     try {
-        if (endBalance <= 0) throw "Error";
+        if (endBalance <= 0) throw "Ошибка";
     }
     catch (...) {
-        cout << "End balance is lower than 0" << endl;
+        cout << "Итоговый баланс ниже нуля" << endl;
     }
-    cout << "Second Auto started with the value of" << endBalance << endl;
+    cout << "Вторая транзакция началась со значения " << endBalance << endl;
     if (firstUser.beginAutos(endBalance)) {
         firstUser.showState(State::begin);
         firstUser.commit();
     }
     cout << "--------------------------------------------------"
         << endl;
-    cout << "First Auto has finished successfully" << endl;
+    cout << "Первая транзакция завершилась успешно" << endl;
     firstUser.showState(State::middle);
 }
