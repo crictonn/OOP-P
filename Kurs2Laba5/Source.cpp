@@ -112,10 +112,10 @@ int main() {
 				cin >> l;
 				switch (l) {
 				case 1:
-					fout.open(path1, ios::binary);
+					fout.open(path1, ios::app);
 					book.getData(); book.getDiscountAmount(); book.getAuthor(); system("pause"); fout.write(reinterpret_cast<char*>(&book), sizeof(Book));
 					fout.close(); break;
-				case 2: fout.open(path2, ios::binary);
+				case 2: fout.open(path2, ios::app);
 					movie.getData(); movie.getDiscountAmount(); movie.getYear(); system("pause"); fout.write(reinterpret_cast<char*>(&movie), sizeof(Movie));
 					fout.close(); break;
 				case 3: break;
@@ -128,7 +128,7 @@ int main() {
 			cin >> l;
 			switch (l) {
 			case 1:
-				fin.open(path1, ios::binary);
+				fin.open(path1, ios::out);
 				if (!fin) {
 					cout << "Ошибка открытия файла\n" << endl; system("pause");
 				}
@@ -149,7 +149,7 @@ int main() {
 				}
 				break;
 			case 2:
-				fin.open(path2, ios::binary);
+				fin.open(path2, ios::out);
 				if (fin.bad()) {
 					cout << "Ошибка открытия файла\n" << endl; system("pause");
 				}
